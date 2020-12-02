@@ -22,20 +22,20 @@ pipeline {
         }
         stage('Build docker image') {
             steps {
-                echo 'mock build step'
+                echo "mock build step"
             }
         }
         stage('Tag and deploy QAS') {
             steps {
-                echo 'mock tag and deploy QAS'
+                echo "mock tag and deploy QAS"
             }
         }
         stage('Tag and deploy PRD') {
             when {
-                expression { env.REF_TAG != "noTagMatches" }
+                expression { env.REF_TAG_COMMIT !=  null }
             }
             steps {
-                echo 'mock tag and deploy PRD'
+                echo "mock tag and deploy PRD - ${env.REF_TAG_COMMIT}"
             }
         }
     }
