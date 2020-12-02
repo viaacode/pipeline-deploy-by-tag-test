@@ -9,7 +9,7 @@ pipeline {
         timeout(time: 45, unit: 'MINUTES')
     }
     environment {
-        REF_TAG = sh(returnStdout: true, script: "git describe --exact-match --tags HEAD || echo noTagMatches").trim()
+        REF_TAG = sh(returnStdout: true, script: "git describe --exact-match --tags $env.GIT_COMMIT || echo noTagMatches").trim()
         REF_TAG_COMMIT = sh(returnStdout: true, script: "git tag --points-at $env.GIT_COMMIT --sort taggerdate | tail -1").trim()
     }
     stages {
