@@ -10,11 +10,14 @@ pipeline {
     }
     environment {
         REF_TAG = sh(returnStdout: true, script: "git describe --exact-match --tags HEAD || echo noTagMatches").trim()
+        REF_TAG_COMMIT = sh(returnStdout: true, script: "git tag --points-at $env.GIT_COMMIT --sort taggerdate | tail -1").trim()
     }
     stages {
         stage('Preamble') {
             steps {
+                echo "COMMIT: ${env.GIT_COMMIT}"
                 echo "REF TAG: ${env.REF_TAG}"
+                echo "REF TAG COMMIT: ${env.REF_TAG_COMMIT}"
             }
         }
         stage('Build docker image') {
