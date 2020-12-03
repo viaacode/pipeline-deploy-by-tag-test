@@ -34,9 +34,9 @@ pipeline {
              latestRef = sh(returnStdout:  true, script: "git log | head -n 1 | cut -d ' ' -f 2").trim()
 
              if( latestRef ==  latestTagRef ) {
-                sh("echo the sha's are the same")
+                sh("echo the shas are the same")
                 sh("echo TRUE > .deploy")
-                sh("git checkout ${env.REF_TAG}")
+                sh("git checkout " +latestRef")
              } else{
              sh("git checkout " + latestTag)
              sh("echo FALSE > .deploy")}
