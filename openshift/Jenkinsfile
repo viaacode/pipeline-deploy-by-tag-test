@@ -39,7 +39,7 @@ pipeline {
                 sh("git checkout ${env.REF_TAG}")
              } else{
              sh("git checkout " + latestTag)
-             sh("echo FALSE > .deploy)}
+             sh("echo FALSE > .deploy")}
 
             }
             sh("echo deploy PRD  is `cat .deploy`")
