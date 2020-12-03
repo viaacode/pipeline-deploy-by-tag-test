@@ -39,7 +39,7 @@ pipeline {
              currentTag = sh(returnStdout:  true, script: "script: 'git tag -l --points-at HEAD'").trim()
              env.CURRENT_VERSION = currentTag
              echo "${env.CURRENT_VERSION}"
-             sh("git checkout " + currentTag")
+             sh("git checkout " + currentTag)
              echo " checkout ${env.CURRENT_VERSION}" 
             }
         }
