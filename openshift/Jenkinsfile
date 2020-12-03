@@ -22,7 +22,7 @@ pipeline {
         }
 
 
-    stage('get git tag') {
+    stage('get latest tag') {
             steps {
              script {
              latestTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
@@ -33,7 +33,7 @@ pipeline {
         }
     }
 
-    stage('get git tag') {
+    stage('get current tag') {
             steps {
              script {
              currentTag = sh(returnStdout:  true, script: "script: 'git tag -l --points-at HEAD'").trim()
