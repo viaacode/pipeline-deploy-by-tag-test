@@ -33,7 +33,7 @@ pipeline {
              echo "latest tag ref:  ${latestTagRef}"
              latestRef = sh(returnStdout:  true, script: "git log | head -n 1 | cut -d ' ' -f 2").trim()
              def refTagCommit = sh(returnStdout:  true, script: "echo ${env.REF_TAG_COMMIT}").trim()
-             if ( refTagCommit != null ){
+             if ( refTagCommit != "null" ){
              currentTagRef = sh(returnStdout:  true, script: "git log ${env.REF_TAG_COMMIT}| head -n 1 | cut -d ' ' -f 2").trim()}
              else {currentTagRef = "undefind"} 
              if( latestRef ==  latestTagRef ) {
@@ -42,10 +42,11 @@ pipeline {
                 sh("echo ${env.REF_TAG_COMMIT}")
                 sh("git checkout ${env.REF_TAG_COMMIT}")
              }else if (latestRef  != currentTagRef) {
+                if (currentTagRef != "undefind"){
                 sh("echo this is a new tag on old commit")
-                sh("echo TRUE > .deploy")
+                sh("echo FALSE > .deploy")
                 sh("echo ${env.REF_TAG_COMMIT}")
-                sh("git checkout " + currentTagRef)
+                sh("git checkout " + currentTagRef)}
 
              } 
              else{
