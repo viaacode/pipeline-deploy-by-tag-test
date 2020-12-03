@@ -29,6 +29,7 @@ pipeline {
              env.BUILD_VERSION = latestTag
              echo "env-BUILD_VERSION"
              echo "${env.BUILD_VERSION}"
+             buildVersion = sh(returnStdout:  true, script: "echo ${env.BUILD_VERSION}").trim()
              latestTagRef = sh(returnStdout:  true, script: "git log ${env.BUILD_VERSION}| head -n 1 | cut -d ' ' -f 2").trim()
              echo "latest tag ref:  ${latestTagRef}"
              latestRef = sh(returnStdout:  true, script: "git log | head -n 1 | cut -d ' ' -f 2").trim()
@@ -39,7 +40,7 @@ pipeline {
              echo "currentTagRef " +currentTagRef
              if( latestRef ==  latestTagRef ) {
                 sh("echo the shas are the same")
-                sh("echo TRUE > .deploy")
+                sh("echo TRUE latestTagRef == latestRef > .deploy")
                 sh("echo ${env.REF_TAG_COMMIT}")
                 sh("git checkout ${env.REF_TAG_COMMIT}")
              }else if (latestRef  != currentTagRef) {
@@ -50,12 +51,13 @@ pipeline {
                 sh("git checkout " + currentTagRef)}
                 else{
                   sh("echo FALSE > .deploy")
+                  sh("git checkout " + buildVersion)
                 }
 
              } 
              else{
              sh("git checkout " + latestRef)
-             sh("echo FALSE > .deploy")}
+             sh("echo FALSE latestRef > .deploy")}
 
             }
             sh("echo deploy PRD  is `cat .deploy`")
