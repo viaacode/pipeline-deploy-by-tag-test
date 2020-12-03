@@ -13,13 +13,39 @@ pipeline {
         REF_TAG_COMMIT = sh(returnStdout: true, script: "git tag --points-at $env.GIT_COMMIT --sort taggerdate | tail -1").trim()
     }
     stages {
-        stage('Preamble') {
+     stage('Preamble') {
             steps {
                 echo "COMMIT: ${env.GIT_COMMIT}"
                 echo "REF TAG: ${env.REF_TAG}"
                 echo "REF TAG COMMIT: ${env.REF_TAG_COMMIT}"
             }
         }
+
+
+    stage('get git tag') {
+            steps {
+             script {
+             latestTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
+             env.BUILD_VERSION = latestTag
+             echo "env-BUILD_VERSION"
+             echo "${env.BUILD_VERSION}"
+            }
+        }
+    }
+
+    stage('get git tag') {
+            steps {
+             script {
+             currentTag = sh(returnStdout:  true, script: "script: 'git tag -l --points-at HEAD'").trim()
+             env.CURRENT_VERSION = currentTag
+             echo "${env.CURRENT_VERSION}"
+             sh("git checkout " + currentTag")
+             echo " checkout ${env.CURRENT_VERSION}" 
+            }
+        }
+    }
+
+
         stage('Build docker image') {
             steps {
                 echo "mock build step"
