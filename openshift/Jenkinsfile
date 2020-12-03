@@ -48,6 +48,9 @@ pipeline {
                 sh("echo oldcommit TRUE > .deploy")
                 sh("echo ${env.REF_TAG_COMMIT}")
                 sh("git checkout " + currentTagRef)}
+                else{
+                  sh("echo FALSE > .deploy")
+                }
 
              } 
              else{
