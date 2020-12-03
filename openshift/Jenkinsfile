@@ -36,9 +36,9 @@ pipeline {
              if( latestRef ==  latestTagRef ) {
                 sh("echo the shas are the same")
                 sh("echo TRUE > .deploy")
-                sh("git checkout " + latestRef)
+                sh("git checkout " + latestTag)
              } else{
-             sh("git checkout " + latestTag)
+             sh("git checkout " + latestRef)
              sh("echo FALSE > .deploy")}
 
             }
