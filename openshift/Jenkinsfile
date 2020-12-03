@@ -32,12 +32,20 @@ pipeline {
              latestTagRef = sh(returnStdout:  true, script: "git log ${env.BUILD_VERSION}| head -n 1 | cut -d ' ' -f 2").trim()
              echo "latest tag ref:  ${latestTagRef}"
              latestRef = sh(returnStdout:  true, script: "git log | head -n 1 | cut -d ' ' -f 2").trim()
-
+             currentTagRef = sh(returnStdout:  true, script: "git log ${env.REF_TAG_COMMIT}| head -n 1 | cut -d ' ' -f 2").trim() 
              if( latestRef ==  latestTagRef ) {
                 sh("echo the shas are the same")
                 sh("echo TRUE > .deploy")
-                sh("git checkout " + latestTag)
-             } else{
+                sh("echo ${env.REF_TAG_COMMIT}")
+                sh("git checkout ${env.REF_TAG_COMMIT}")
+             }else if (latestRef  != currentTagRef) {
+                sh("echo this is a new tag on old commit")
+                sh("echo TRUE > .deploy")
+                sh("echo ${env.REF_TAG_COMMIT}")
+                sh("git checkout " + currentTagRef)
+
+             } 
+             else{
              sh("git checkout " + latestRef)
              sh("echo FALSE > .deploy")}
 
