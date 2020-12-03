@@ -29,9 +29,17 @@ pipeline {
              env.BUILD_VERSION = latestTag
              echo "env-BUILD_VERSION"
              echo "${env.BUILD_VERSION}"
+             latestTagRef = sh(returnStdout:  true, script: "git log ${env.BUILD_VERSION}| head -n 1 | cut -d ' ' -f 2").trim()
+             if( latestTagRef ==  ${env.REF_TAG} ) {
+                sh 'echo the sha's are the same';
+                sh("echo TRUE > .deploy)
+                sh("git checkout " + ${env.REF_TAG})
+             } else{
              sh("git checkout " + latestTag)
-         
+             sh("echo FALSE > .deploy)}
+
             }
+            sh("echo deploy PRD  is `cat .deploy`")
         }
     }
 
