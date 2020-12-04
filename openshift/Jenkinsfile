@@ -11,6 +11,7 @@ pipeline {
     environment {
         REF_TAG = sh(returnStdout: true, script: "git describe --exact-match --tags $env.GIT_COMMIT || echo noTagMatches").trim()
         REF_TAG_COMMIT = sh(returnStdout: true, script: "git tag --points-at $env.GIT_COMMIT --sort taggerdate | tail -1").trim()
+        
     }
     stages {
      stage('Preamble') {
@@ -18,6 +19,7 @@ pipeline {
                 echo "COMMIT: ${env.GIT_COMMIT}"
                 echo "REF TAG: ${env.REF_TAG}"
                 echo "REF TAG COMMIT: ${env.REF_TAG_COMMIT}"
+                echo "TAG_NAME: ${env.TAG_NAME}
             }
         }
 
