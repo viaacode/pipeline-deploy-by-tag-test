@@ -32,7 +32,7 @@ pipeline {
              latestRef = sh(returnStdout:  true, script: "git log | head -n 1 | cut -d ' ' -f 2").trim()
              echo ("the latest ref is $latestRef")
              def refTagCommit = sh(returnStdout:  true, script: "echo ${env.REF_TAG_COMMIT}").trim()
-             echo("the ref of the current Tag is $refTagCommit)
+             echo("the ref of the current Tag is $refTagCommit")
              if ( refTagCommit != "null" ){
              currentTagRef = sh(returnStdout:  true, script: "git log ${env.REF_TAG_COMMIT}| head -n 1 | cut -d ' ' -f 2").trim()}
              else {currentTagRef = "undefind"} 
