@@ -26,14 +26,13 @@ pipeline {
             steps {
              script {
              latestTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
-             env.BUILD_VERSION = latestTag
-             echo "env-BUILD_VERSION"
-             echo "${env.BUILD_VERSION}"
-             buildVersion = sh(returnStdout:  true, script: "echo ${env.BUILD_VERSION}").trim()
-             latestTagRef = sh(returnStdout:  true, script: "git log ${env.BUILD_VERSION}| head -n 1 | cut -d ' ' -f 2").trim()
+             echo("i found latest tag " +latestTag)
+             latestTagRef = sh(returnStdout:  true, script: "git log $latestTag| head -n 1 | cut -d ' ' -f 2").trim()
              echo "latest tag ref:  ${latestTagRef}"
              latestRef = sh(returnStdout:  true, script: "git log | head -n 1 | cut -d ' ' -f 2").trim()
+             echo ("the latest ref is $latestRef")
              def refTagCommit = sh(returnStdout:  true, script: "echo ${env.REF_TAG_COMMIT}").trim()
+             echo("the ref of the current Tag is $refTagCommit)
              if ( refTagCommit != "null" ){
              currentTagRef = sh(returnStdout:  true, script: "git log ${env.REF_TAG_COMMIT}| head -n 1 | cut -d ' ' -f 2").trim()}
              else {currentTagRef = "undefind"} 
@@ -42,7 +41,7 @@ pipeline {
                 sh("echo the shas are the same")
                 sh("echo TRUE latestTagRef == latestRef > .deploy")
                 sh("echo ${env.REF_TAG_COMMIT}")
-                sh("git checkout ${env.REF_TAG_COMMIT}")
+                sh("git checkout ${env.REF_TAG_COMMIT}") //latest tag == latest commit
              }else if (latestRef  != currentTagRef) {
                 if (currentTagRef != "undefind"){
                 sh("echo this is a new tag on old commit")
@@ -51,13 +50,15 @@ pipeline {
                 sh("git checkout " + currentTagRef)}
                 else{
                   sh("echo FALSE > .deploy")
-                  sh("git checkout " + buildVersion)
+                  echo ("not sure how you can get here")
+                  sh("git checkout " + latestRef) //not sure when you get here 
                 }
 
              } 
              else{
              sh("git checkout " + latestRef)
-             sh("echo FALSE latestRef > .deploy")}
+             echo ("no tag on commit")
+             sh("echo FALSE latestRef > .deploy")}//no tag on commit
 
             }
             sh("echo deploy PRD  is `cat .deploy`")
