@@ -50,8 +50,8 @@ pipeline {
                 sh("git checkout " + currentTagRef)}
                 else{
                   sh("echo FALSE > .deploy")
-                  echo ("not sure how you can get here")
-                  sh("git checkout " + latestRef) //not sure when you get here 
+                  echo ("/push to master withjout tag choukout latest ref")
+                  sh("git checkout " + latestRef) //push to master withjout tag
                 }
 
              } 
